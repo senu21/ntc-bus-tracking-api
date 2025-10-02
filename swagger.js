@@ -10,16 +10,11 @@ const options = {
     },
     servers: [
       {
-        url: "https://ntc-bus-tracking-api-jyqx.onrender.com", // ✅ Render deployment
-        description: "Production server",
-      },
-      {
-        url: "http://localhost:5000", // ✅ Local dev
-        description: "Local development server",
+        url: "https://ntc-bus-tracking-api-jyqx.onrender.com", // update after deployment
       },
     ],
   },
-  apis: ["./routes/*.js"], // adjust if your routes are in src/routes
+  apis: ["./routes/*.js"], // <-- point to your route files
 };
 
 const swaggerSpec = swaggerJSDoc(options);
