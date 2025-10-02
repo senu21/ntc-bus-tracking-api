@@ -9,7 +9,9 @@ import routeRoutes from "./routes/routes.js";
 import busRoutes from "./routes/buses.js";
 import tripRoutes from "./routes/trips.js";
 
-// Load environment variables
+// Optional: seed data
+import seedData from "../seed/seedData.js"; // adjust path if different
+
 dotenv.config();
 
 const app = express();
@@ -25,9 +27,12 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API for NTC Bus Tracking system",
     },
-    servers: [{ url: "https://ntc-bus-tracking-api-jyqx.onrender.com" }],
+    servers: [
+      { url: "http://localhost:5000" }, // Local dev
+      { url: "https://ntc-bus-tracking-api-jyqx.onrender.com" } // Render deployment
+    ],
   },
-  apis: ["./src/routes/*.js"], // adjust path if your route files are in src/routes
+  apis: ["./src/routes/*.js"], // path to route files
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -41,8 +46,19 @@ app.use("/trips", tripRoutes);
 // ------------------ MONGODB ------------------
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error(err));
+  .then(async () => {
+    console.log("✅ MongoDB connected");
 
+    // Optional: seed DB only if empty
+    const busCount = await mongoose.connection.db.collection("buses").countDocuments();
+    if (busCount === 0) {
+      console.log("🚀 Seeding database...");
+      await seedData();
+      console.log("✅ Database seeded");
+    }
+  })
+  .catch(err => console.error("❌ MongoDB connection error:", err));
+
+// ------------------ START SERVER ------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
