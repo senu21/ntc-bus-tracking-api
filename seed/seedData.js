@@ -71,4 +71,6 @@ const seedData = async () => {
   }
 };
 
-seedData();
+
+export default seedData;  // ✅ default export
+

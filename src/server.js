@@ -10,7 +10,7 @@ import busRoutes from "./routes/buses.js";
 import tripRoutes from "./routes/trips.js";
 
 // Optional: seed data
-import { seedData } from "../seed/seedData.js";// adjust path if different
+import seedData from "../seed/seedData.js";// adjust path if different
 
 dotenv.config();
 
