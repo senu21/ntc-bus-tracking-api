@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://your-domain.com", // update after deployment
+        url: "https://ntc-bus-tracking-api-jyqx.onrender.com", // update after deployment
       },
     ],
   },
