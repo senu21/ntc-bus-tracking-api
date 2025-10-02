@@ -47,12 +47,14 @@ router.get("/", async (req, res) => {
  */
 router.get("/route/:routeId", async (req, res) => {
   try {
-    const buses = await Bus.find({ routeId: req.params.routeId });
+    // Use 'route' field from Bus schema
+    const buses = await Bus.find({ route: req.params.routeId });
     res.json(buses);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 /**
  * @swagger
