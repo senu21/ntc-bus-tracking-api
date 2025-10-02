@@ -25,7 +25,7 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API for NTC Bus Tracking system",
     },
-    servers: [{ url: "http://localhost:5000" }],
+    servers: [{ url: "https://ntc-bus-tracking-api-jyqx.onrender.com" }],
   },
   apis: ["./src/routes/*.js"], // adjust path if your route files are in src/routes
 };
