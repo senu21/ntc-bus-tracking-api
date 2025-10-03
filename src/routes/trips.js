@@ -22,7 +22,7 @@ const router = express.Router();
  */
 router.get("/", async (req, res) => {
   try {
-    const trips = await Trip.find();
+    const trips = await Trip.find().populate("bus route");
     res.json(trips);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
  */
 router.get("/route/:routeId", async (req, res) => {
   try {
-    const trips = await Trip.find({ routeId: req.params.routeId });
+    const trips = await Trip.find({ route: req.params.routeId }).populate("bus route");
     res.json(trips);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -63,21 +63,38 @@ router.get("/route/:routeId", async (req, res) => {
  *     parameters:
  *       - in: query
  *         name: routeId
+ *         required: true
  *         schema:
  *           type: string
+ *         description: The route ID
  *       - in: query
  *         name: date
+ *         required: true
  *         schema:
  *           type: string
  *           format: date
+ *         description: The date (YYYY-MM-DD)
  *     responses:
  *       200:
  *         description: Trips for route and date
  */
 router.get("/date", async (req, res) => {
   const { routeId, date } = req.query;
+
+  if (!routeId || !date) {
+    return res.status(400).json({ error: "routeId and date are required" });
+  }
+
   try {
-    const trips = await Trip.find({ routeId, date });
+    const start = new Date(date);
+    const end = new Date(date);
+    end.setDate(end.getDate() + 1);
+
+    const trips = await Trip.find({
+      route: routeId,
+      date: { $gte: start, $lt: end }
+    }).populate("bus route");
+
     res.json(trips);
   } catch (err) {
     res.status(500).json({ error: err.message });

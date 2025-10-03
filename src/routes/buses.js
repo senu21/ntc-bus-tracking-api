@@ -47,39 +47,7 @@ router.get("/", async (req, res) => {
  */
 router.get("/route/:routeId", async (req, res) => {
   try {
-    // Use 'route' field from Bus schema
     const buses = await Bus.find({ route: req.params.routeId });
-    res.json(buses);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
-/**
- * @swagger
- * /buses/trip:
- *   get:
- *     summary: Get buses by route and date
- *     tags: [Buses]
- *     parameters:
- *       - in: query
- *         name: routeId
- *         schema:
- *           type: string
- *       - in: query
- *         name: date
- *         schema:
- *           type: string
- *           format: date
- *     responses:
- *       200:
- *         description: Buses for a route on a specific date
- */
-router.get("/trip", async (req, res) => {
-  const { routeId, date } = req.query;
-  try {
-    const buses = await Bus.find({ routeId, "trips.date": date });
     res.json(buses);
   } catch (err) {
     res.status(500).json({ error: err.message });
